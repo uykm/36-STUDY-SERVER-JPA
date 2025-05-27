@@ -2,15 +2,13 @@ package hellojpa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.SequenceGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +29,11 @@ public class Member extends BaseEntity {
 //    @GeneratedValue(strategy = GenerationType.TABLE,
 //            generator = "MEMBER_SEQ_GENERATOR")
     @Id @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
 
     @Column(name = "USERNAME")
-    private String userName;
+    private String username;
 
 //    // EnumType.ORDINAL
 //    // : enum의 순서값으로 저장하기 때문에,
@@ -57,28 +56,30 @@ public class Member extends BaseEntity {
 
     // @Transient : DB에 저장 X
 
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "TEAM_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "TEAM_ID") // Member 테이블에 TEAM_ID 컬럼이 존재해야 함
     // insertable = false, updatable = false : Member 테이블에 TEAM_ID 컬럼이 없기 때문에
     private Team team;
 
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
+//    @OneToOne
+//    @JoinColumn(name = "LOCKER_ID")
+//    private Locker locker;
 
 //    @ManyToMany // 다대다 X
 //    private List<Product> products = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProducts = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "member")
+//    private List<MemberProduct> memberProducts = new ArrayList<>();
 
 
 
     public Member() {}
 
-    public Member(Long id, String userName) {
+    public Member(Long id, String username) {
         this.id = id;
-        this.userName = userName;
+        this.username = username;
     }
 
     public Long getId() {
@@ -89,11 +90,19 @@ public class Member extends BaseEntity {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String userName) {
+        this.username = userName;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

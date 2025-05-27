@@ -1,25 +1,29 @@
 package hellojpa;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Team extends BaseEntity {
+public class Parent {
 
-    @Id @GeneratedValue
-    @Column(name = "TEAM_ID")
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "TEAM_ID")
-    private List<Member> members = new ArrayList<>();
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Child> children = new ArrayList<>();
+
+    public void addChild(Child child) {
+        children.add(child);
+        child.setParent(this); // 양방향 연관관계 설정
+    }
 
     public Long getId() {
         return id;
@@ -37,11 +41,11 @@ public class Team extends BaseEntity {
         this.name = name;
     }
 
-    public List<Member> getMembers() {
-        return members;
+    public List<Child> getChildren() {
+        return children;
     }
 
-    public void setMembers(List<Member> members) {
-        this.members = members;
+    public void setChildren(List<Child> children) {
+        this.children = children;
     }
 }
