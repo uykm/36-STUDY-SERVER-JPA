@@ -1,20 +1,21 @@
-package jpabook.jpashop.domain;
+package hellojpa;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 
 @Entity
+ @Inheritance(strategy = InheritanceType.JOINED)
+// @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn
 public class Item {
-
-    @Id @GeneratedValue
-    @Column(name = "ITEM_ID")
+    @Id
+    @GeneratedValue
     private Long id;
-
-    private String name;
-    private int price;
-    private int stockQuantity;
 
     public Long getId() {
         return id;
@@ -40,11 +41,7 @@ public class Item {
         this.price = price;
     }
 
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
+    private String name;
+    private int price;
 
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
 }

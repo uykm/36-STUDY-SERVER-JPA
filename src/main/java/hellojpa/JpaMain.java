@@ -4,12 +4,13 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
         // 애플리케이션 로딩 시점에 딱 1번만 호출
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hellojpa");
 
         // 엔티티 매니저는 쓰레드 간에 공유 X, 사용하고 버려야 한다.
         EntityManager em = emf.createEntityManager();
@@ -87,30 +88,99 @@ public class JpaMain {
 //            Member member = em.find(Member.class, 150L);
 //            member.setName("UPDATE");
 
-            Member member1 = new Member();
-            member1.setUsername("A");
+//            Member member1 = new Member();
+//            member1.setUsername("A");
+//
+//            Member member2 = new Member();
+//            member2.setUsername("B");
+//
+//            Member member3 = new Member();
+//            member3.setUsername("C");
+//
+//            System.out.println("=====================");
+//
+//            em.persist(member1); //1, 51 : 50까지 미리 더미로 호출
+//            // 51를 만나기 전엔 `call next value`를 한 번만
+//            em.persist(member2); //MEM
+//            em.persist(member3); //MEM
+//
+//            // 내부적인 로직 덕분에 select 없이 insert 쿼리만으로 값 조회해올 수 있다.
+//            System.out.println("member1.id" + member1.getId());
+//            System.out.println("member2.id" + member2.getId());
+//            System.out.println("member3.id" + member3.getId());
 
-            Member member2 = new Member();
-            member2.setUsername("B");
-
-            Member member3 = new Member();
-            member3.setUsername("C");
-
-            System.out.println("=====================");
-
-            em.persist(member1); //1, 51 : 50까지 미리 더미로 호출
-            // 51를 만나기 전엔 `call next value`를 한 번만
-            em.persist(member2); //MEM
-            em.persist(member3); //MEM
-
-            // 내부적인 로직 덕분에 select 없이 insert 쿼리만으로 값 조회해올 수 있다.
-            System.out.println("member1.id" + member1.getId());
-            System.out.println("member2.id" + member2.getId());
-            System.out.println("member3.id" + member3.getId());
 
 
+//            System.out.println("=====================");
+//
+//            Member member = new Member();
+//            member.setUserName("member1");
+//
+//            em.persist(member);
+//
+//            Team team = new Team();
+//            team.setName("team1");
+//            //
+//            team.getMembers().add(member);
+//
+//            em.persist(team);
 
-            System.out.println("=====================");
+            tx.commit();
+
+
+            // Movie movie = new Movie();
+            // movie.setDirector("aaaa");
+            // movie.setActor("bbbb");
+            // movie.setName("바람과 함께 사라지다");
+            // movie.setPrice(10000);
+            // em.persist(movie);
+            //
+            // em.flush();
+            // em.clear();
+            //
+            // Movie findMovie = em.find(Movie.class, movie.getId());
+            // System.out.println("findMovie = " + findMovie);
+
+            // Member member = new Member();
+            // member.setUsername("member1");
+            //
+            // em.persist(member);
+            //
+            // Team team = new Team();
+            // team.setName("teamA");
+            // //
+            // team.getMembers().add(member);
+            //
+            // em.persist(team);
+
+
+            // Team team = new Team();
+            // team.setName("TeamA");
+            // // team.getMembers().add(member);
+            // em.persist(team);
+            //
+            // Member member = new Member();
+            // member.setUsername("member1");
+            // // member.setTeamId(team.getId());
+            // member.setTeam(team);
+            // em.persist(member);
+            //
+            // em.flush();
+            // em.clear();
+            //
+            // Member findMember = em.find(Member.class, member.getId());
+            // List<Member> members = findMember.getTeam().getMembers();
+            //
+            // for (Member m : members) {
+            // 	System.out.println("m = " + m.getUsername());
+            // }
+
+            Member member = new Member();
+            member.setUserName("user1");
+            member.setCreatedBy("kim");
+            member.setCreatedDate(LocalDateTime.now());
+
+            em.persist(member);
 
             tx.commit();
         } catch (Exception e) {
